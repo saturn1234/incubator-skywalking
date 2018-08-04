@@ -96,6 +96,11 @@ public class ComponentsDefine {
 
     public static final  OfficialComponent ACTIVEMQ_CONSUMER = new OfficialComponent(46,"activemq-consumer");
 
+    public static final OfficialComponent CDAL =  new OfficialComponent(47, "CDAL");
+
+
+
+
     private static ComponentsDefine INSTANCE = new ComponentsDefine();
 
     private String[] components;
@@ -105,7 +110,9 @@ public class ComponentsDefine {
     }
 
     public ComponentsDefine() {
-        components = new String[47];
+
+        components = new String[48];
+
         addComponent(TOMCAT);
         addComponent(HTTPCLIENT);
         addComponent(DUBBO);
@@ -141,8 +148,7 @@ public class ComponentsDefine {
         addComponent(SOFARPC);
         addComponent(ACTIVEMQ_PRODUCER);
         addComponent(ACTIVEMQ_CONSUMER);
-
-
+        addComponent(CDAL);
     }
 
     private void addComponent(OfficialComponent component) {
