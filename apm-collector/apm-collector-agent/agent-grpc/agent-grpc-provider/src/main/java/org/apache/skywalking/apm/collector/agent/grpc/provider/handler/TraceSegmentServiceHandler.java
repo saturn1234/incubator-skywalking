@@ -44,6 +44,8 @@ public class TraceSegmentServiceHandler extends TraceSegmentServiceGrpc.TraceSeg
     @Override public StreamObserver<UpstreamSegment> collect(StreamObserver<Downstream> responseObserver) {
         return new StreamObserver<UpstreamSegment>() {
             @Override public void onNext(UpstreamSegment segment) {
+                logger.info("receive segment");
+               // logger.info("segment.getApplicationId():"+ segment.get` + "segment.getApplicationInstanceId() + " + segment.getApplicationInstanceId() );
                 if (logger.isDebugEnabled()) {
                     logger.debug("receive segment");
                 }

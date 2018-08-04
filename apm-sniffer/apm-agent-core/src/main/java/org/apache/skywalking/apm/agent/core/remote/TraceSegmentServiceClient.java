@@ -112,6 +112,7 @@ public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSe
 
             for (TraceSegment segment : data) {
                 try {
+                    logger.info("Agent Send segment.getApplicationId():"+ segment.getApplicationId() + "segment.getApplicationInstanceId() + " + segment.getApplicationInstanceId() );
                     UpstreamSegment upstreamSegment = segment.transform();
                     upstreamSegmentStreamObserver.onNext(upstreamSegment);
                 } catch (Throwable t) {
@@ -121,10 +122,10 @@ public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSe
             upstreamSegmentStreamObserver.onCompleted();
 
             status.wait4Finish();
-            segmentUplinkedCounter += data.size();
-        } else {
-            segmentAbandonedCounter += data.size();
-        }
+        segmentUplinkedCounter += data.size();
+    } else {
+        segmentAbandonedCounter += data.size();
+    }
 
         printUplinkStatus();
     }
