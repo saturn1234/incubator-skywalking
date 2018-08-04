@@ -60,6 +60,8 @@ public class ContextManager implements TracingContextListener, BootService, Igno
                 if (RemoteDownstreamConfig.Agent.APPLICATION_ID != DictionaryUtil.nullValue()
                     && RemoteDownstreamConfig.Agent.APPLICATION_INSTANCE_ID != DictionaryUtil.nullValue()
                     ) {
+                    logger.info("create TraceContext");
+                    logger.info("RemoteDownstreamConfig.Agent.APPLICATION_INSTANCE_ID:" + RemoteDownstreamConfig.Agent.APPLICATION_INSTANCE_ID);
                     context = EXTEND_SERVICE.createTraceContext(operationName, forceSampling);
                 } else {
                     /**
@@ -94,11 +96,13 @@ public class ContextManager implements TracingContextListener, BootService, Igno
         AbstractSpan span;
         AbstractTracerContext context;
         if (carrier != null && carrier.isValid()) {
+            logger.info("create createEntrySpan isValid");
             samplingService.forceSampled();
             context = getOrCreate(operationName, true);
             span = context.createEntrySpan(operationName);
             context.extract(carrier);
         } else {
+            logger.info("create createEntrySpan operationName:" + operationName);
             context = getOrCreate(operationName, false);
             span = context.createEntrySpan(operationName);
         }
