@@ -165,6 +165,9 @@ activemq-producer:
 activemq-consumer:
   id: 46
   languages: Java
+CDAL:
+  id: 47
+  languages: Java
 # .NET/.NET Core components
 # [3000, 4000) for C#/.NET only
 AspNetCore:
