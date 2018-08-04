@@ -156,6 +156,7 @@ public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSe
 
     @Override
     public void afterFinished(TraceSegment traceSegment) {
+        logger.info("traceSegment isIgnore:" + traceSegment.isIgnore());
         if (traceSegment.isIgnore()) {
             return;
         }
