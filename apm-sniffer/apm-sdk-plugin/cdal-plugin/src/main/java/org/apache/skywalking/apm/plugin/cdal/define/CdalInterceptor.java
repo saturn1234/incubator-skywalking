@@ -3,6 +3,7 @@
 package org.apache.skywalking.apm.plugin.cdal.define;
 
 
+import com.google.common.base.Joiner;
 import org.apache.skywalking.apm.agent.core.context.CarrierItem;
 import org.apache.skywalking.apm.agent.core.context.ContextCarrier;
 import org.apache.skywalking.apm.agent.core.context.ContextManager;
@@ -55,8 +56,23 @@ public class CdalInterceptor implements InstanceMethodsAroundInterceptor {
                               Object ret) throws Throwable {
         logger.info("cdal afterMethod");
         System.out.println("cdal afterMethod");
-        AbstractSpan span = ContextManager.activeSpan();
-        ContextManager.stopSpan();
+
+
+        String oriSQL = (String)allArguments[3];
+        logger.info("oriSQL:" + oriSQL);
+        System.out.println("oriSQL:" + oriSQL);
+
+
+        AbstractSpan span = ContextManager.createExitSpan(oriSQL ,"localhost:8066");
+
+
+        Tags.DB_TYPE.set(span, "sql");
+        Tags.DB_INSTANCE.set(span, "cdal_instance");
+        Tags.DB_STATEMENT.set(span, oriSQL);
+
+        span.setComponent(ComponentsDefine.CDAL);
+        SpanLayer.asDB(span);
+
         return ret;
     }
 
