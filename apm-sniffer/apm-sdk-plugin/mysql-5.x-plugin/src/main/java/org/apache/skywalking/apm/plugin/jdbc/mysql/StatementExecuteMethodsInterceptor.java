@@ -23,11 +23,13 @@ import org.apache.skywalking.apm.agent.core.context.ContextManager;
 import org.apache.skywalking.apm.agent.core.context.tag.Tags;
 import org.apache.skywalking.apm.agent.core.context.trace.AbstractSpan;
 import org.apache.skywalking.apm.agent.core.context.trace.SpanLayer;
+import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedInstance;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.InstanceMethodsAroundInterceptor;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInterceptResult;
 import org.apache.skywalking.apm.plugin.jdbc.define.StatementEnhanceInfos;
 import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
+import org.apache.skywalking.apm.agent.core.logging.api.ILog;
 
 /**
  * {@link StatementExecuteMethodsInterceptor} create the exit span when the client call the interceptor methods.
@@ -35,12 +37,22 @@ import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
  * @author zhangxin
  */
 public class StatementExecuteMethodsInterceptor implements InstanceMethodsAroundInterceptor {
+
+
+    private static final ILog logger = LogManager.getLogger(StatementExecuteMethodsInterceptor.class);
+
     @Override
     public final void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments,
         Class<?>[] argumentsTypes,
         MethodInterceptResult result) throws Throwable {
         StatementEnhanceInfos cacheObject = (StatementEnhanceInfos)objInst.getSkyWalkingDynamicField();
         ConnectionInfo connectInfo = cacheObject.getConnectionInfo();
+
+
+        logger.info("begin exec jdbc StatementExecuteMethodsInterceptor");
+        if (allArguments.length > 0) {
+            logger.info("sql" +(String)allArguments[0]);
+        }
         /**
          * To protected the code occur NullPointException. because mysql execute system sql when constructor method in
          * {@link com.mysql.jdbc.ConnectionImpl} class executed. but the interceptor set the connection Info after
