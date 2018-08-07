@@ -413,7 +413,7 @@ public class TracingContext implements AbstractTracerContext {
         } else {
             throw new IllegalStateException("Stopping the unexpected span = " + span);
         }
-        logger.info("enter stop Span");
+        logger.info("curentThread:" +Thread.currentThread() + ",enter stop Span");
         if (activeSpanStack.isEmpty()) {
             logger.info("activeSpanStack.isEmpty(),before finish");
             this.finish();
