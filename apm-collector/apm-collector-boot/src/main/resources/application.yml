@@ -16,12 +16,12 @@
 
 #cluster:
 #  zookeeper:
-#    hostPort: localhost:2181
+#    hostPort: 10.211.155.126:2181
 #    sessionTimeout: 100000
 naming:
   jetty:
     #OS real network IP(binding required), for agent to find collector cluster
-    host: localhost
+    host: 10.211.155.126
     port: 10800
     contextPath: /
 cache:
@@ -30,12 +30,12 @@ cache:
 remote:
   gRPC:
     # OS real network IP(binding required), for collector nodes communicate with each other in cluster. collectorN --(gRPC) --> collectorM
-    host: localhost
+    host: 10.211.155.126
     port: 11800
 agent_gRPC:
   gRPC:
     #OS real network IP(binding required), for agent to uplink data(trace/metrics) to collector. agent--(gRPC)--> collector
-    host: localhost
+    host: 10.211.155.126
     port: 11800
     # Set these two setting to open ssl
     #sslCertChainFile: $path
@@ -48,7 +48,7 @@ agent_jetty:
     # OS real network IP(binding required), for agent to uplink data(trace/metrics) to collector through HTTP. agent--(HTTP)--> collector
     # SkyWalking native Java/.Net/node.js agents don't use this.
     # Open this for other implementor.
-    host: localhost
+    host: 10.211.155.126
     port: 12800
     contextPath: /
 analysis_register:
@@ -63,16 +63,16 @@ analysis_segment_parser:
     bufferFileCleanWhenRestart: true
 ui:
   jetty:
-    # Stay in `localhost` if UI starts up in default mode.
+    # Stay in `10.211.155.126` if UI starts up in default mode.
     # Change it to OS real network IP(binding required), if deploy collector in different machine.
-    host: localhost
+    host: 10.211.155.126
     port: 12800
     contextPath: /
 storage:
   elasticsearch:
     clusterName: CollectorDBCluster
     clusterTransportSniffer: true
-    clusterNodes: localhost:9300
+    clusterNodes: 10.211.155.126:9300
     indexShardsNumber: 2
     indexReplicasNumber: 0
     highPerformanceMode: true
@@ -109,6 +109,6 @@ configuration:
     workerCacheMaxSize: 10000
 #receiver_zipkin:
 #  default:
-#    host: localhost
+#    host: 10.211.155.126
 #    port: 9411
 #    contextPath: /

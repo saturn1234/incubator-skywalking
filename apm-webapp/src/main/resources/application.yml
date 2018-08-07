@@ -26,7 +26,7 @@ zuul:
 collector:
   path: /graphql
   ribbon:
-    listOfServers: 127.0.0.1:10800
+    listOfServers: 10.211.155.126:10800
     NIWSServerListClassName: org.apache.skywalking.apm.webapp.proxy.CollectorServerList
 
 security:

@@ -1,7 +1,4 @@
-
-
 package org.apache.skywalking.apm.plugin.cdal.define;
-
 
 import org.apache.skywalking.apm.agent.core.context.CarrierItem;
 import org.apache.skywalking.apm.agent.core.context.ContextCarrier;
@@ -16,41 +13,24 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.InstanceM
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInterceptResult;
 import org.apache.skywalking.apm.network.trace.component.ComponentsDefine;
 
-
 import java.lang.reflect.Method;
 
+public class CdalRealInterceptor implements InstanceMethodsAroundInterceptor {
 
 
-
-public class CdalInterceptor implements InstanceMethodsAroundInterceptor {
-
-
-    private static final ILog logger = LogManager.getLogger(CdalInterceptor.class);
+    private static final ILog logger = LogManager.getLogger(CdalRealInterceptor.class);
 
     @Override
     public void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
                              MethodInterceptResult result) throws Throwable {
-        logger.info("cdal beforeMethod");
-        System.out.println("cdal beforeMethod");
-        String oriSQL = (String)allArguments[0];
-        logger.info("oriSQL:" + oriSQL +",currentThread:" + Thread.currentThread());
-        System.out.println("oriSQL:" + oriSQL);
+        logger.info("cdal real beforeMethod");
+        String query = (String)allArguments[0];
+        logger.info("oriSQL:" + query +",currentThread:" + Thread.currentThread());
 
-
-
-
-
-        ContextCarrier contextCarrier = new ContextCarrier();
-        CarrierItem next = contextCarrier.items();
-        while (next.hasNext()) {
-            next = next.next();
-            next.setHeadValue("cdalHead");
-        }
-
-        AbstractSpan span = ContextManager.createEntrySpan("cdalExecute", contextCarrier);
+        AbstractSpan span = ContextManager.createExitSpan("jdbcExecute" ,"127.0.0.1:8066");
         span.setComponent(ComponentsDefine.CDAL);
         SpanLayer.asRPCFramework(span);
-        Tags.DB_STATEMENT.set(span , oriSQL);
+        Tags.DB_STATEMENT.set(span , query);
 //        SQLType sqlType = (SQLType)allArguments[0];
 //        ContextManager.createLocalSpan("/SJDBC/TRUNK/" + sqlType.name()).setComponent(ComponentsDefine.SHARDING_JDBC);
     }
@@ -58,8 +38,10 @@ public class CdalInterceptor implements InstanceMethodsAroundInterceptor {
     @Override
     public Object afterMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
                               Object ret) throws Throwable {
-        logger.info("cdal afterMethod");
+        logger.info("cdal real afterMethod");
+        AbstractSpan span = ContextManager.activeSpan();
         ContextManager.stopSpan();
+
         return ret;
     }
 

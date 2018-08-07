@@ -33,8 +33,9 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 
 public class CdalExecutorInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
     
-    private static final String ENHANCE_CLASS = "io.mycat.route.impl.AbstractRouteStrategy";
-    
+   // private static final String ENHANCE_CLASS = "io.mycat.route.impl.AbstractRouteStrategy";
+   private static final String ENHANCE_CLASS = "io.mycat.server.ServerQueryHandler";
+
     private static final String EXECUTOR_ENGINE_CONSTRUCTOR_INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.cdal.define.ExecutorEngineConstructorInterceptor";
 
     private static final String EXECUTE_INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.cdal.define.CdalInterceptor";
@@ -64,7 +65,7 @@ public class CdalExecutorInstrumentation extends ClassInstanceMethodsEnhancePlug
             new InstanceMethodsInterceptPoint() {
                 @Override
                 public ElementMatcher<MethodDescription> getMethodsMatcher() {
-                    return named("route");
+                    return named("query");
                 }
 
                 @Override
