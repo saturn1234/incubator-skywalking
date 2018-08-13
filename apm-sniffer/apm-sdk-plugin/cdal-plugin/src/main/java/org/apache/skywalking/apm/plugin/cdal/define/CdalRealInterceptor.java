@@ -1,5 +1,6 @@
 package org.apache.skywalking.apm.plugin.cdal.define;
 
+import io.mycat.route.RouteResultsetNode;
 import org.apache.skywalking.apm.agent.core.context.CarrierItem;
 import org.apache.skywalking.apm.agent.core.context.ContextCarrier;
 import org.apache.skywalking.apm.agent.core.context.ContextManager;
@@ -14,6 +15,7 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInt
 import org.apache.skywalking.apm.network.trace.component.ComponentsDefine;
 
 import java.lang.reflect.Method;
+import java.util.Random;
 
 public class CdalRealInterceptor implements InstanceMethodsAroundInterceptor {
 
@@ -24,13 +26,16 @@ public class CdalRealInterceptor implements InstanceMethodsAroundInterceptor {
     public void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
                              MethodInterceptResult result) throws Throwable {
         logger.info("cdal real beforeMethod");
-        String query = (String)allArguments[0];
-        logger.info("oriSQL:" + query +",currentThread:" + Thread.currentThread());
+        if(null == allArguments[2]){
+            return;
+        }
+        RouteResultsetNode rsNode = (RouteResultsetNode)allArguments[2];
+        logger.info("currentThread:" + Thread.currentThread() + ",oriSQL:" + rsNode.getStatement());
 
-        AbstractSpan span = ContextManager.createExitSpan("jdbcExecute" ,"127.0.0.1:8066");
-        span.setComponent(ComponentsDefine.CDAL);
-        SpanLayer.asRPCFramework(span);
-        Tags.DB_STATEMENT.set(span , query);
+        AbstractSpan span = ContextManager.createExitSpan("jdbcExecute in:" + rsNode.getName()   ,rsNode.getName()+ ":3306");
+        span.setComponent(ComponentsDefine.MYSQL_JDBC_DRIVER);
+        SpanLayer.asDB(span);
+        Tags.DB_STATEMENT.set(span , rsNode.getStatement());
 //        SQLType sqlType = (SQLType)allArguments[0];
 //        ContextManager.createLocalSpan("/SJDBC/TRUNK/" + sqlType.name()).setComponent(ComponentsDefine.SHARDING_JDBC);
     }
