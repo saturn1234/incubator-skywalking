@@ -45,7 +45,7 @@ public enum OperationNameDictionary {
     }
 
     public PossibleFound findOnly(int applicationId, String operationName) {
-        return find0(applicationId, operationName, false, false, false);
+        return find0(applicationId, operationName, false, false, true);
     }
 
     private PossibleFound find0(int applicationId, String operationName,
