@@ -13,7 +13,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 
 public class CdalRealExecutorInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 
-    private static final String ENHANCE_CLASS = "io.mycat.backend.mysql.nio.MySQLConnection";
+    private static final String ENHANCE_CLASS = "io.mycat.backend.datasource.PhysicalDBNode";
 
     private static final String EXECUTOR_ENGINE_CONSTRUCTOR_INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.cdal.define.ExecutorEngineConstructorInterceptor";
 
@@ -44,7 +44,7 @@ public class CdalRealExecutorInstrumentation extends ClassInstanceMethodsEnhance
                 new InstanceMethodsInterceptPoint() {
                     @Override
                     public ElementMatcher<MethodDescription> getMethodsMatcher() {
-                        return named("sendQueryCmd");
+                        return named("getConnection");
                     }
 
                     @Override
