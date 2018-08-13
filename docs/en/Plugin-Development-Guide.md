@@ -39,7 +39,7 @@ Here are the steps about how to use **ContextCarrier** in a `A->B` distributed c
 
 Let's demonstrate the steps by Apache HTTPComponent client plugin and Tomcat 7 server plugin
 1. Client side steps by Apache HTTPComponent client plugin
-```java
+
             span = ContextManager.createExitSpan("/span/operation/name", contextCarrier, "ip:port");
             CarrierItem next = contextCarrier.items();
             while (next.hasNext()) {
