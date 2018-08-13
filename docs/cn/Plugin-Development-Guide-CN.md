@@ -87,7 +87,6 @@ public static AbstractSpan createExitSpan(String operationName, ContextCarrier c
 ### 二. AbstractSpan
 AbstractSpan提供了Span内部，进行操作的各项API
 
-```java
     /**
      * Set the component id, which defines in {@link ComponentsDefine}
      *
